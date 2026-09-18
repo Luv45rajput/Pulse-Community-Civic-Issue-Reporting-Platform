@@ -1,0 +1,86 @@
+// use prisma-8
+
+enum IssueStatus {
+  @@type("pg/text@1")
+
+  Reported   = "reported"
+  Verified   = "verified"
+  InProgress = "in_progress"
+  Resolved   = "resolved"
+}
+
+enum IssueCategory {
+  @@type("pg/text@1")
+
+  Pothole    = "pothole"
+  Garbage    = "garbage"
+  Streetlight = "streetlight"
+  Water      = "water"
+  Drainage   = "drainage"
+  Other      = "other"
+}
+
+model Issue {
+  id          Uuid          @id @default(uuid())
+  title       String
+  description String
+  category    IssueCategory
+  status      IssueStatus   @default(Reported)
+
+  location    String
+  latitude    Float
+  longitude   Float
+
+  imageUrl    String?
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now())
+
+  statusHistory StatusHistory[]
+  confirmations Confirmation[]
+  comments      Comment[]
+
+  @@index([status])
+  @@index([category])
+  @@index([latitude, longitude])
+  @@map("issues")
+}
+
+model StatusHistory {
+  id        Uuid        @id @default(uuid())
+  issueId   Uuid
+  status    IssueStatus
+  note      String?
+  createdAt DateTime    @default(now())
+
+  issue Issue @relation(fields: [issueId], references: [id])
+
+  @@index([issueId])
+  @@map("status_history")
+}
+
+model Confirmation {
+  id        Uuid     @id @default(uuid())
+  issueId   Uuid
+  visitorId String
+  createdAt DateTime @default(now())
+
+  issue Issue @relation(fields: [issueId], references: [id])
+
+  @@unique([issueId, visitorId])
+  @@index([issueId])
+  @@map("confirmations")
+}
+
+model Comment {
+  id        Uuid     @id @default(uuid())
+  issueId   Uuid
+  author    String?
+  content   String
+  createdAt DateTime @default(now())
+
+  issue Issue @relation(fields: [issueId], references: [id])
+
+  @@index([issueId])
+  @@map("comments")
+}
