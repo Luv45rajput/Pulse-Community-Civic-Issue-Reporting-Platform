@@ -1,6 +1,7 @@
 import { useState } from "react"
 
-const API_URL = "http://localhost:5000/api"
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
 
 function Report() {
   const [title, setTitle] = useState("")
@@ -8,10 +9,8 @@ function Report() {
   const [description, setDescription] = useState("")
   const [location, setLocation] = useState("")
   const [photo, setPhoto] = useState<File | null>(null)
-
   const [latitude, setLatitude] = useState("")
   const [longitude, setLongitude] = useState("")
-
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
@@ -45,7 +44,6 @@ function Report() {
     event: React.FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault()
-
     setMessage("")
     setError("")
 
@@ -95,7 +93,6 @@ function Report() {
       }
 
       setMessage("Issue reported successfully!")
-
       setTitle("")
       setCategory("")
       setDescription("")

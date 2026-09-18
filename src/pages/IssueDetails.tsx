@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
-const API_URL = "http://localhost:5000/api"
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+
 const VISITOR_KEY = "pulse_visitor_id"
 
 type StatusHistory = {
