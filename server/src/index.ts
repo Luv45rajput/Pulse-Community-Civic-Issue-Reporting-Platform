@@ -6,7 +6,7 @@ import cors from "cors"
 import { db } from "./prisma/db.js"
 
 const app = express()
-const PORT = 5000
+const PORT = Number(process.env.PORT) || 5000
 
 app.use(cors())
 app.use(express.json())
@@ -381,7 +381,7 @@ app.post("/api/issues/:id/confirm", async (req, res) => {
 
     const confirmation =
       await db.orm.public.Confirmation.create({
-        issueId: req.params.id,
+        issueId: issue.id,
         visitorId,
         createdAt: now(),
       })
