@@ -1,75 +1,79 @@
-# React + TypeScript + Vite
+# Pulse — Community Civic Issue Reporting Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Pulse is a community-powered civic issue reporting platform for discovering, reporting, verifying, and tracking local problems.
 
-Currently, two official plugins are available:
+It allows people to report issues such as potholes, garbage, broken streetlights, drainage problems, and water issues. Reported problems can be explored on an interactive map, confirmed by other community members, and tracked through a simple status workflow.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tagline
 
-## React Compiler
+**Report. Verify. Resolve.**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- Report local civic issues
+- Capture the user's location using browser geolocation
+- Explore reported issues on an interactive map
+- Search issues by title, description, or location
+- Filter issues by category and status
+- View detailed information about individual issues
+- Confirm that an existing issue is actually present
+- Track issue status:
+  - Reported
+  - Verified
+  - In Progress
+  - Resolved
+- Maintain status history for each issue
+- Detect likely duplicate reports using geographic proximity, category, and text similarity
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## What Makes Pulse Different
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+A major focus of Pulse is reducing duplicate reports.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Instead of treating every submission as a completely separate problem, the backend checks whether a similar issue already exists nearby.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The duplicate detection logic considers:
 
-```
+1. Geographic distance between reports
+2. Issue category
+3. Similarity between the issue title and description
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+If a sufficiently similar issue is already present nearby, Pulse prevents another duplicate record from being created.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This keeps the issue list more meaningful and makes the number of reported issues closer to the number of actual problems.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
 
-```
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- React Router
+- Tailwind CSS
+- React Leaflet
+- Leaflet
+
+### Backend
+
+- Node.js
+- Express
+- TypeScript
+- CORS
+
+### Database
+
+- PostgreSQL
+- Prisma ORM
+
+## Architecture
+
+```text
+React Frontend
+      |
+      | HTTP / REST API
+      v
+Express Backend
+      |
+      | Prisma ORM
+      v
+PostgreSQL
